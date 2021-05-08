@@ -12,13 +12,13 @@ import AuthService from "../services/auth.service";
 
 
 //options for marital status 
-// const designationOptions=[
-//   {value :"Scholer", label:"Scholer"},
-//   {value :"Professor", label:"Professor"},
-//   {value :"HOD", label:"HOD"},
-//   {value :"AssistentProfessor", label:"Assistent Professor"},
-//   {value :"NonTeachingStaff", label:"Non-Teaching Staff"}
-// ];
+const designationOptions=[
+  {value :"Scholer", label:"Scholer"},
+  {value :"Professor", label:"Professor"},
+  {value :"HOD", label:"HOD"},
+  {value :"AssistentProfessor", label:"Assistent Professor"},
+  {value :"NonTeachingStaff", label:"Non-Teaching Staff"}
+];
 
 const required = value => {
   if (!value) {
@@ -151,20 +151,21 @@ export default class Register extends Component {
       message: "",
       successful: false
     });
-
     this.form.validateAll();
-
+    var joiningDate=this.state.joinDate.getDate() + '-' + (this.state.joinDate.getMonth() + 1) + '-' + this.state.joinDate.getFullYear();
+     let user= {
+      username :this.state.username,
+      password :this.state.password,
+      firstName :this.state.firstName,
+      lastName:this.state.lastName,
+      joinDate:joiningDate,
+      email:this.state.email,
+      mobileNo:this.state.mobileNo,
+      designation:this.state.designation.value
+     }
+     console.log("User",user);
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
-        this.state.username,
-        this.state.password,
-        this.state.firstName,
-        this.state.lastName,
-        this.state.joinDate,
-        this.state.email,
-        this.state.mobileNo,
-        this.state.designation
-      ).then(
+      AuthService.register(user).then(
         response => {
           this.setState({
             message: response.data.message,
@@ -296,14 +297,14 @@ export default class Register extends Component {
                   />
                 </div>
 
-                {/* <div className="form-group">
-                     <label htmlFor="designation">Designation </label>
+                <div className="form-group">
+                     <label>Designation </label>
                         <Select  name="designation"  
                                   value={this.state.designation}
                                   onChange={this.handleDesignationChange}
                                   options={designationOptions} 
                         />
-                  </div> */}
+                  </div>
 
                 <div className="form-group">
                   <button className="btn btn-primary btn-block">Sign Up</button>

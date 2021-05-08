@@ -78,6 +78,7 @@ public class AuthController {
 												 userDetails.getMobileNo(),
 												 userDetails.getEmail(), 
 												 userDetails.getJoinDate(),
+										
 												 roles));
 	}
 

@@ -12,6 +12,9 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardAdmin from "./components/board-admin.component";
 import ViewAllEmployees from "./components/ViewAllEmployees";
+import ApplyLeave from "./components/ApplyLeave";
+import ViewAllRequest from "./components/ViewAllRequest";
+import MyRequests from "./components/MyRequests";
 
 class App extends Component {
   constructor(props) {
@@ -50,12 +53,7 @@ class App extends Component {
             LMS
           </Link>
           <div className="navbar-nav mr-auto">
-            {/* <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
-              </Link>
-            </li> */}
-
+            
             {/* {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -66,10 +64,9 @@ class App extends Component {
 
             {isAdmin && (
               <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
+                <Link to={"/admin/requests"} className="nav-link">
                   Leave Requests
                 </Link>
-               
               </li>
             )}
             
@@ -89,6 +86,22 @@ class App extends Component {
                 </Link>
               </li>
             )}
+
+            {!isAdmin && currentUser && (
+              <li className="nav-item">
+                <Link to={"/leave-request"} className="nav-link">
+                  Apply Leave
+                </Link>
+              </li>
+            )}    
+
+            {!isAdmin && currentUser && (
+              <li className="nav-item">
+                <Link to={"/my-requests"} className="nav-link">
+                  My History
+                </Link>
+              </li>
+            )}    
           </div>
 
           {currentUser ? (
@@ -128,9 +141,11 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={BoardUser} />
+            <Route path="/leave-request" component={ApplyLeave} />
             <Route path="/admin/employees" component={ViewAllEmployees} />
             {/* <Route path="/mod" component={BoardModerator} /> */}
-            <Route path="/admin" component={BoardAdmin} />
+            <Route path="/admin/requests" component={ViewAllRequest} />
+            <Route path="/my-requests" component={MyRequests} />
           </Switch>
         </div>
       </div>

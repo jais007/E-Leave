@@ -100,6 +100,14 @@ public class UserDetailsImpl implements UserDetails {
 	public int getId() {
 		return empId;
 	}
+    
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
 
 	public String getEmail() {
 		return email;

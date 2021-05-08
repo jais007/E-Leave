@@ -1,5 +1,6 @@
 package com.nitc.lms.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,29 +15,37 @@ import javax.persistence.Table;
 @Table(name="requests")
 public class Request {
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
 	private int id;
-	
+    
 //	@OneendDateMany(fetch = FetchType.LAZY)
 //	@JoinTable(	name = "users", 
 //				joinColumns = @JoinColumn(name = "emp_id"), 
 //				inverseJoinColumns = @JoinColumn(name = "request_id"))
 	private int empId;
+	private String leaveType;
 	private String requestDate;
 	private String startDate;
 	private String endDate;
 	private String status;
 	
-	public Request(int empId, String requestDate, String startDate, String endDate, String status) {
+	
+	public Request() {
+		this.status = "Pending";
+	}
+	public Request(int empId, String leaveType, String requestDate, String startDate, String endDate) {
 		super();
 		this.empId = empId;
+		this.leaveType =leaveType;
 		this.requestDate = requestDate;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.status = status;
+		this.status = "Pending";
 	}
-
+    
 	public int getId() {
 		return id;
 	}
@@ -53,6 +62,14 @@ public class Request {
 		this.empId = empId;
 	}
 
+	public String getLeaveType() {
+		return leaveType;
+	}
+
+	public void setLeaveType(String leaveType) {
+		this.leaveType = leaveType;
+	}
+
 	public String getRequestDate() {
 		return requestDate;
 	}
@@ -60,20 +77,20 @@ public class Request {
 	public void setRequestDate(String requestDate) {
 		this.requestDate = requestDate;
 	}
-
-	public String getstartDate() {
+    
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setstartDate(String startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getendDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setendDate(String endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
@@ -84,6 +101,13 @@ public class Request {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	@Override
+	public String toString() {
+		return "Request [id=" + id + ", empId=" + empId + ", leaveType=" + leaveType + ", requestDate=" + requestDate
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + "]";
+	}
+
+	
 	
 	
 }
