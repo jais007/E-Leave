@@ -16,7 +16,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	
 	Optional<User> findByUsername(String username);
-
+	
+	public User findById(int id);
+	
 	Boolean existsByUsername(String username);
 	
 	@Query(value = "SELECT account_status FROM USERS u WHERE u.username =:username", nativeQuery = true)

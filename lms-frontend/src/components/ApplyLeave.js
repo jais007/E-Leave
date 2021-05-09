@@ -11,7 +11,7 @@ import authService from "../services/auth.service";
 
 
 const leaveOptions=[
-  {value :"Sick", label:"Sick"},
+  {value :"Sick Leave", label:"Sick Leave"},
   {value :"Casual Leave", label:"Casual Leave"},
   {value :"Earned Leave", label:"Earned Leave"}
 ];
@@ -23,7 +23,7 @@ export default class ApplyLeave extends Component {
     this.state = {
       empId: "",
       leaveType:"",
-      startDate:  new Date(),
+      startDate: new Date(),
 	    endDate:  new Date(),
       successful: false,
       message: "",
@@ -59,7 +59,6 @@ export default class ApplyLeave extends Component {
     this.setState({
         leaveType: op
     })
-    console.log("leaveType",this.state.leaveType)
   }
 
   handleStartDateChange=(date)=>{
@@ -76,13 +75,25 @@ export default class ApplyLeave extends Component {
   handleNewRequest(e) {
     e.preventDefault();
     let appliedDate= new Date()
-    let today =appliedDate.getDate() + '-' + (appliedDate.getMonth() + 1) + '-' + appliedDate.getFullYear();
-    let start=this.state.startDate.getDate() + '-' + (this.state.startDate.getMonth() + 1) + '-' + this.state.startDate.getFullYear();
-    let end=this.state.endDate.getDate() + '-' + (this.state.endDate.getMonth() + 1) + '-' + this.state.endDate.getFullYear();
+    let requestday =appliedDate.getDate() <=9 ? ('0'+appliedDate.getDate()):appliedDate.getDate();
+    let requestmonth =(appliedDate.getMonth()+1)  <=9 ? ( '0'+(appliedDate.getMonth()+1)):(appliedDate.getMonth()+1);
+    let today =requestday+ '-' + requestmonth + '-' + appliedDate.getFullYear();
 
+    let startDay =this.state.startDate.getDate() <=9 ? ('0'+this.state.startDate.getDate()):this.state.startDate.getDate();
+    let startMonth =(this.state.startDate.getMonth()+1)  <=9 ? ( '0'+(this.state.startDate.getMonth()+1)):(this.state.startDate.getMonth()+1);
+    let start =startDay+ '-' + startMonth + '-' + this.state.startDate.getFullYear();
+
+    let endDay =this.state.endDate.getDate() <=9 ? ('0'+this.state.endDate.getDate()):this.state.endDate.getDate();
+    let endMonth =(this.state.endDate.getMonth()+1)  <=9 ? ( '0'+(this.state.endDate.getMonth()+1)):(this.state.endDate.getMonth()+1);
+    let end =endDay+ '-' + endMonth + '-' + this.state.endDate.getFullYear();
+
+    // let start=this.state.startDate.getDate() + '-' + (this.state.startDate.getMonth() + 1) + '-' + this.state.startDate.getFullYear();
+    // let end=this.state.endDate.getDate() + '-' + (this.state.endDate.getMonth() + 1) + '-' + this.state.endDate.getFullYear();
+    console.log("leaveType",this.state.leaveType.value)
+    console.log("Date",today)
     let leaveRequest = {
         empId : this.state.empId,
-        leaveType:this.state.leaveType.value,
+        leaveType:(this.state.leaveType =="") ? "" : this.state.leaveType.value,
         requestDate:today,
         startDate:start,
         endDate:end,

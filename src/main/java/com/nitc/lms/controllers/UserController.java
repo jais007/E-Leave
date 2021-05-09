@@ -62,8 +62,8 @@ public class UserController {
 	  // delete employee rest api
 	  @DeleteMapping("/admin/employees/{id}")
 	  public List<User> deleteEmployee(@PathVariable int id){
-	  User user = userRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
+	  User user = userRepository.findById(id);
+					//.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
 			Integer roleId=this.userRepository.isAdmin(id);
 			if(roleId==1 || roleId=='1')
 			  this.userRepository.delete(user);

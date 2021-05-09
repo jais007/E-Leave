@@ -26,21 +26,15 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
 	
 	public Request findById(int requestId);
 	
-	 @Query(value="select * from Requests a where a.emp_id = :empId ", nativeQuery=true)
+	@Query(value="select * from Requests a where a.emp_id = :empId ", nativeQuery=true)
 	public List<Request> findByEmpId(int empId);
-	
-//	@Query(value="select u from requests u where u.empId= :empId ", nativeQuery=true)
-//	public Request findById(int requestId);
 	
 	@Modifying
 	@Query(value = "UPDATE Requests u set status = 'Approved' where u.id = :requestId",nativeQuery = true)
 	public void approveLeaveRequest(int requestId);
 	
-//	@Modifying
-//	@Query(value = "UPDATE Requests u set status = 'Declined' where u.id = :requestId",nativeQuery = true)
-//	public void declineLeaveRequest(int requestId);
 	
-   // public Page<Request> findAllByOrderByIdDesc(Pageable pageable);
+   //public Page<Request> findAllByOrderByIdDesc(Pageable pageable);
     
 }
 

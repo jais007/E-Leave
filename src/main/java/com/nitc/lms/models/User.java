@@ -51,8 +51,8 @@ public class User {
 		this.email = email;
 		this.mobileNo = mobileNo;
 		this.designation = designation;
-		this.sickLeave = 0;
-		this.casualLeave = 0;
+		this.sickLeave = 14;
+		this.casualLeave = 7;
 		this.earnedLeave = 0;
 		this.accountStatus = false;
 	}
@@ -175,8 +175,15 @@ public class User {
 	public void setAccountStatus(boolean accountStatus) {
 		this.accountStatus = accountStatus;
 	}
-	
-	
 
+
+	@Override
+	public String toString() {
+		return "User [empId=" + empId + ", username=" + username + ", password=" + password + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", joinDate=" + joinDate + ", email=" + email + ", mobileNo=" + mobileNo
+				+ ", designation=" + designation + ", sickLeave=" + sickLeave + ", casualLeave=" + casualLeave
+				+ ", earnedLeave=" + earnedLeave + ", accountStatus=" + accountStatus + ", roles=" + roles + "]";
+	}
+	
 
 }
