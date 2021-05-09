@@ -16,8 +16,7 @@ MySQL:
 ## Configure Spring Datasource, JPA, App properties
 Open `src/main/resources/application.properties`
 
-```
-- For MySQL
+For MySQL
 ```
 spring.datasource.url= jdbc:mysql://localhost:3306/testdb?useSSL=false
 spring.datasource.username= root
@@ -25,7 +24,6 @@ spring.datasource.password= 123456
 
 spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.MySQL5InnoDBDialect
 spring.jpa.hibernate.ddl-auto= update
-
 ```
 ## Run Spring Boot application
 ```
