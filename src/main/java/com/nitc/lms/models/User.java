@@ -28,6 +28,10 @@ public class User {
 	private double casualLeave;
 	private double earnedLeave;
 	private boolean accountStatus;
+	private boolean isEnabled;
+	
+	@Column(name = "reset_password_token")
+	private String resetPasswordToken;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 
@@ -55,6 +59,7 @@ public class User {
 		this.casualLeave = 7;
 		this.earnedLeave = 0;
 		this.accountStatus = false;
+		
 	}
 
 	
@@ -174,6 +179,26 @@ public class User {
 
 	public void setAccountStatus(boolean accountStatus) {
 		this.accountStatus = accountStatus;
+	}
+
+    
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
+
+    
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 
 

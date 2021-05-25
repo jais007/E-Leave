@@ -13,10 +13,10 @@ import AuthService from "../services/auth.service";
 
 //options for marital status 
 const designationOptions=[
-  {value :"Scholer", label:"Scholer"},
+  {value :"Scholar", label:"Scholar"},
   {value :"Professor", label:"Professor"},
   {value :"HOD", label:"HOD"},
-  {value :"AssistentProfessor", label:"Assistent Professor"},
+  {value :"AssistantProfessor", label:"Assistant Professor"},
   {value :"NonTeachingStaff", label:"Non-Teaching Staff"}
 ];
 
@@ -314,15 +314,11 @@ export default class Register extends Component {
 
             {this.state.message && (
               <div className="form-group">
-                <div
-                  className={
-                    this.state.successful
-                      ? "alert alert-success"
-                      : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
+                <div className={ this.state.successful
+                                 ? "alert alert-success"
+                                : "alert alert-danger"}
+                  role="alert">
+                   {this.state.message}
                 </div>
               </div>
             )}

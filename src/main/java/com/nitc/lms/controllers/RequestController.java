@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nitc.lms.models.Request;
@@ -38,17 +40,28 @@ public class RequestController {
 	private UserRepository userRepository;
 	
 	
-	@GetMapping("/admin/requests")
-	public List<Request> getAllRequest(){
-		return this.requestRepository.findAll();
+	@GetMapping("/requests")
+	@PreAuthorize("hasRole('MOD') or hasRole('ADMIN')")
+	public List<Request> getAllRequest(@RequestParam("role") String UserRole){
+		if(UserRole.equals("ADMIN"))
+	         	return this.requestRepository.findByOrderByIdDesc();
+		return this.requestRepository.findByDesignationNotByOrderByIdDesc("HOD");
 	}
 	
     //get Application by Id handler
 	@GetMapping("/user/requests/{empId}")
 	public List<Request> getRequestById(@PathVariable("empId") int empId) {
-		return this.requestRepository.findByEmpId(empId);
+		return this.requestRepository.findByEmpIdOrderByIdDesc(empId);
 	}
 	
+	@GetMapping("/employee-requests/{id}")
+//	@PreAuthorize("hasRole('MOD') or hasRole('ADMIN')")
+	public List<Request> getAllRequestByEmplyoeeId(@PathVariable("id") int id,@RequestParam("role") String UserRole){
+		if(UserRole.equals("ADMIN"))
+	         	return this.requestRepository.findByEmpIdOrderByIdDesc(id);
+		return this.requestRepository.findByIdByDesignationNotOrderByDateDesc(id);
+	//	return null;
+	}
 	
 	//adding new Application handler
 //	@PostMapping("/user/add-leave")
@@ -69,7 +82,7 @@ public class RequestController {
 	public List<Request> changeRequestStatus(@PathVariable("requestId") int requestId, @RequestBody Request request){
 		System.out.println(request.toString());
 		this.requestRepository.save(request);
-		return this.requestRepository.findAll();
+		return this.requestRepository.findByOrderByIdDesc();
 	}
    
 	@PostMapping("/user/add-leave")
@@ -83,6 +96,12 @@ public class RequestController {
         	return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Please select type of leave"));
+        }
+        int empId=request.getEmpId();
+        if(requestRepository.checkPendingRequest(empId)!=null) {
+        	return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Your last leave request is still pending, You can't make a new request"));
         }
         if(vacationDays <= 0 ) {
 			return ResponseEntity
@@ -117,6 +136,7 @@ public class RequestController {
 			if(request.getLeaveType().equals("Earned Leave")) {
 				user.setEarnedLeave(user.getEarnedLeave()-vacationDays);
 			}
+			request.setDesignation(user.getDesignation());
 			this.requestRepository.save(request);
 			this.userRepository.save(user);
 	        return ResponseEntity.ok(new MessageResponse("Leave applied successfully!"));

@@ -133,6 +133,10 @@ export default class Login extends Component {
               </button>
             </div>
 
+            {/* <div className="form-group">
+              <a href="/forgot-password">Forgot Password</a>
+            </div> */}
+
             {this.state.message && (
               <div className="form-group">
                 <div className="alert alert-danger" role="alert">
@@ -146,6 +150,7 @@ export default class Login extends Component {
                 this.checkBtn = c;
               }}
             />
+            
           </Form>
         </div>
       </div>

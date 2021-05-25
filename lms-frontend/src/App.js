@@ -15,6 +15,9 @@ import ViewAllEmployees from "./components/ViewAllEmployees";
 import ApplyLeave from "./components/ApplyLeave";
 import ViewAllRequest from "./components/ViewAllRequest";
 import MyRequests from "./components/MyRequests";
+import ViewEmployeeById from "./components/ViewEmployeeById";
+import ViewRequestByEmployeeById from "./components/ViewRequestByEmployeeId";
+//import forgotPassword from "./components/forgotPassword";
 
 class App extends Component {
   constructor(props) {
@@ -22,19 +25,23 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
-      isAdmin: false,
+      Role: "",
       currentUser: undefined,
     };
   }
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-
+    
     if (user) {
+      let userRole="";
+      if(user.roles.includes("ROLE_ADMIN")) userRole="ADMIN";
+      else if(user.roles.includes("ROLE_MOD")) userRole="MOD";
+      else userRole="USER";
       this.setState({
         currentUser: user,
        // showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        isAdmin: user.roles.includes("ROLE_ADMIN"),
+        Role: userRole
       });
     }
   }
@@ -44,8 +51,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, isAdmin } = this.state;
-
+    const { currentUser, Role } = this.state;
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
@@ -62,32 +68,32 @@ class App extends Component {
               </li>
             )} */}
 
-            {isAdmin && (
+            {(Role === "ADMIN" || Role === "MOD" )&& (
               <li className="nav-item">
-                <Link to={"/admin/requests"} className="nav-link">
+                <Link to={"/requests"} className="nav-link">
                   Leave Requests
                 </Link>
               </li>
             )}
             
-            {isAdmin && (
+            {(Role === "ADMIN" || Role === "MOD" ) && (
               <li className="nav-item">
-                <Link to={"/admin/employees"} className="nav-link">
+                <Link to={"/employees"} className="nav-link">
                  All Employees 
                 </Link>
                
               </li>
             )}
            
-            {!isAdmin && currentUser && (
+            {/* {!isAdmin && currentUser && (
               <li className="nav-item">
                 <Link to={"/user"} className="nav-link">
                   Dashboard
                 </Link>
               </li>
-            )}
+            )} */}
 
-            {!isAdmin && currentUser && (
+            {Role!=="ADMIN" && currentUser && (
               <li className="nav-item">
                 <Link to={"/leave-request"} className="nav-link">
                   Apply Leave
@@ -95,7 +101,7 @@ class App extends Component {
               </li>
             )}    
 
-            {!isAdmin && currentUser && (
+            {Role!=="ADMIN" && currentUser && (
               <li className="nav-item">
                 <Link to={"/my-requests"} className="nav-link">
                   My History
@@ -136,16 +142,18 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
-            <Route exact path="/login" component={Login} />
+            <Route exact path={["/", "/login"]} component={Login} />
+            {/* <Route exact path="/login" component={Login} /> */}
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={BoardUser} />
             <Route path="/leave-request" component={ApplyLeave} />
-            <Route path="/admin/employees" component={ViewAllEmployees} />
+            <Route path="/employees" component={ViewAllEmployees} />
             {/* <Route path="/mod" component={BoardModerator} /> */}
-            <Route path="/admin/requests" component={ViewAllRequest} />
+            <Route path="/requests" component={ViewAllRequest} />
             <Route path="/my-requests" component={MyRequests} />
+            <Route path="/view-application/:id" component={ViewEmployeeById} />
+            <Route path="/view-request/:id" component={ViewRequestByEmployeeById} />
           </Switch>
         </div>
       </div>

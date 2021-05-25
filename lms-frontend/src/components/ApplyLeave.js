@@ -22,6 +22,7 @@ export default class ApplyLeave extends Component {
     super(props);
     this.state = {
       empId: "",
+      designation:"",
       leaveType:"",
       startDate: new Date(),
 	    endDate:  new Date(),
@@ -37,6 +38,7 @@ export default class ApplyLeave extends Component {
   
   componentDidMount() {
     const currentUser = authService.getCurrentUser();
+    console.log("Designation",currentUser.designation);
     let isAdmin =false
     if(currentUser){
         isAdmin =  currentUser.roles.includes("ROLE_ADMIN")
@@ -51,7 +53,10 @@ export default class ApplyLeave extends Component {
             redirect: "/profile",
           }); 
     }else{
-        this.setState({ empId: currentUser.id})
+        this.setState({ 
+          empId: currentUser.id,
+          designation:currentUser.designation,
+           })
     }  
     
  }
@@ -93,6 +98,7 @@ export default class ApplyLeave extends Component {
     console.log("Date",today)
     let leaveRequest = {
         empId : this.state.empId,
+        designation:this.state.designation,
         leaveType:(this.state.leaveType =="") ? "" : this.state.leaveType.value,
         requestDate:today,
         startDate:start,

@@ -26,6 +26,7 @@ public class Request {
 //				joinColumns = @JoinColumn(name = "emp_id"), 
 //				inverseJoinColumns = @JoinColumn(name = "request_id"))
 	private int empId;
+	private String designation;
 	private String leaveType;
 	private String requestDate;
 	private String startDate;
@@ -36,9 +37,10 @@ public class Request {
 	public Request() {
 		this.status = "Pending";
 	}
-	public Request(int empId, String leaveType, String requestDate, String startDate, String endDate) {
+	public Request(int empId,String designation, String leaveType, String requestDate, String startDate, String endDate) {
 		super();
 		this.empId = empId;
+		this.designation=designation;
 		this.leaveType =leaveType;
 		this.requestDate = requestDate;
 		this.startDate = startDate;
@@ -61,7 +63,13 @@ public class Request {
 	public void setEmpId(int empId) {
 		this.empId = empId;
 	}
-
+    
+	public String getDesignation() {
+		return designation;
+	}
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
 	public String getLeaveType() {
 		return leaveType;
 	}

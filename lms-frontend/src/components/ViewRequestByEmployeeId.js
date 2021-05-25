@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
-import authService from '../services/auth.service';
 import userService from '../services/user.service';
+import authService from '../services/auth.service';
 import { Redirect } from "react-router-dom";
 
-
-class ViewAllRequest extends Component {
-
+export default class ViewRequestByEmployeeById extends Component {
+    
     constructor(props) {
         super(props)
         this.state = {
+            id: this.props.match.params.id,
             requests: [],
             redirect: null,
         }
         this.approveRequestHandler = this.approveRequestHandler.bind(this);
         this.declineRequestHandler = this.declineRequestHandler.bind(this);
         
-    }
-
-    viewRequestByEmplyoeeId(id){
-        this.props.history.push(`/view-request/${id}`);
     }
     componentDidMount(){
         const currentUser = authService.getCurrentUser();
@@ -44,7 +40,7 @@ class ViewAllRequest extends Component {
               }); 
         }
         else{
-            userService.getAllRequest(Role).then((res) => {
+            userService.getAllRequestByEmplyoeeId(this.state.id,Role).then((res) => {
                 this.setState({requests: res.data});
             });
         } 
@@ -69,6 +65,7 @@ class ViewAllRequest extends Component {
      }
   
     render() {
+        console.log("requests",this.state.requests)
         if (this.state.redirect) {
             return <Redirect to={this.state.redirect} />
           }
@@ -79,8 +76,6 @@ class ViewAllRequest extends Component {
                         <thead>
                             <tr>
                                 <th>Request ID</th>
-                                <th>Emp ID</th>
-                                <th>Designation</th>
                                 <th>Request Date</th>
                                 <th>Leave Type</th>
                                 <th>From </th>
@@ -94,8 +89,6 @@ class ViewAllRequest extends Component {
                                 this.state.requests.map(req =>
                                         <tr key={req.id}>
                                             <td>{req.id}</td>
-                                            <td><a href="" onClick={()=> this.viewRequestByEmplyoeeId(req.empId)}>{req.empId}</a></td>
-                                            <td>{req.designation}</td>
                                             <td>{req.requestDate}</td>
                                             <td>{req.leaveType}</td>
                                             <td>{req.startDate}</td>
@@ -130,5 +123,3 @@ class ViewAllRequest extends Component {
         );
     }
 }
-
-export default ViewAllRequest;

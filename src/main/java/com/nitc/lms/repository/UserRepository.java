@@ -16,16 +16,29 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	
 	Optional<User> findByUsername(String username);
+//	select * from users where designation != "administrator";
+
+	public List<User> findByDesignationNot(String designation);
 	
-	public User findById(int id);
 	
-	Boolean existsByUsername(String username);
+	//@Query(value = "SELECT c FROM Country c WHERE c.designation !=:'administrator' AND c.designation !=:'HOD' ", nativeQuery = true)
+	public List<User> findByDesignationNotIn(List<String> designation);
+	
+	public User findById(int empId);
+	
+//	 @Query(value="SELECT u FROM USERS u WHERE u.email =:email",nativeQuery = true)
+	 public User findByEmail(String email); 
+	 
+	 public User findByResetPasswordToken(String token);
+	
+	public Boolean existsByUsername(String username);
 	
 	@Query(value = "SELECT account_status FROM USERS u WHERE u.username =:username", nativeQuery = true)
-	Boolean isActive(String username);
+	public Boolean isActive(String username);
 	
-	Boolean existsByEmail(String email);
+	public Boolean existsByEmail(String email);
 	
+	public User findByDesignation(String designation);
 	@Query(value = "SELECT role_id FROM USER_ROLES u WHERE u.emp_id =:id", nativeQuery = true)
 	Integer isAdmin(int id);
 	

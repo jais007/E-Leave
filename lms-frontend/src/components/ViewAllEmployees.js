@@ -17,26 +17,33 @@ class ViewAllEmployees extends Component {
         this.changeAccountStatus = this.changeAccountStatus.bind(this);
         
     }
-    // viewApplication(id){
-    //     this.props.history.push(`/view-application/${id}`);
-    // }
+    viewApplication(id){
+        this.props.history.push(`/view-application/${id}`);
+    }
+
     componentDidMount(){
         const currentUser = authService.getCurrentUser();
-        let isAdmin =false
+        let Role="";
         if(currentUser){
-            isAdmin =  currentUser.roles.includes("ROLE_ADMIN")
+            if(currentUser.roles.includes("ROLE_ADMIN")){
+                Role="ADMIN";
+            }else if(currentUser.roles.includes("ROLE_MOD")){
+                Role="MOD";
+            }else{
+                Role="USER";
+            } 
         }
-        console.log("isAdmin",isAdmin)
+        console.log("ROLE",Role)
         if (!currentUser) 
               this.setState({ 
                   redirect: "/login",
                 }); 
-        else if(!isAdmin && currentUser){
+        else if(currentUser && Role === "USER"){
             this.setState({ 
                 redirect: "/profile",
               }); 
         }   
-         userService.getAllEmployee().then((res) => {
+        userService.getAllEmployee(Role).then((res) => {
             this.setState({employees: res.data});
         });
     }
@@ -91,8 +98,9 @@ class ViewAllEmployees extends Component {
                     <table className="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>EMP ID</th>
-                                <th>EMP Name</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Designation</th>
                                 <th>Account Status</th>
                                 <th>Action</th>
                             </tr>
@@ -103,6 +111,7 @@ class ViewAllEmployees extends Component {
                                         <tr key={emp.empId}>
                                             <td><a href="" onClick={()=> this.viewApplication(emp.empId)}>{emp.empId}</a></td>
                                             <td>{emp.firstName} {emp.lastName}</td>
+                                            <td>{emp.designation}</td>
                                              {emp.accountStatus == true ? 
                                                <td style={{color:'#40D428'}}> Active</td> :
                                                <td style={{color:'#FF0000'}}> Not Active</td> 
