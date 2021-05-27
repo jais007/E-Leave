@@ -30,9 +30,9 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
 	
 	
 	public List<Request> findAll();
-	public List<Request> findByOrderByIdDesc();
+	public List<Request> findByStatusNotOrderByIdDesc(String status);
 	
-	@Query(value="select * from Requests a where a.designation <> 'HOD' Order By request_date desc ", nativeQuery=true)
+	@Query(value="select * from Requests a where a.designation <> 'HOD' AND a.status <> 'Cancelled' Order By request_date desc ", nativeQuery=true)
 	public List<Request> findByDesignationNotByOrderByIdDesc(String designation);
 	
 	@Query(value="select * from Requests a where a.emp_id =:id AND a.designation <> 'HOD' Order By request_date desc ", nativeQuery=true)

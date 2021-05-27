@@ -9,6 +9,7 @@ class ViewAllRequest extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            Role:"",
             requests: [],
             redirect: null,
         }
@@ -45,7 +46,10 @@ class ViewAllRequest extends Component {
         }
         else{
             userService.getAllRequest(Role).then((res) => {
-                this.setState({requests: res.data});
+                this.setState({
+                    Role:Role,
+                    requests: res.data
+                });
             });
         } 
     }
@@ -54,7 +58,7 @@ class ViewAllRequest extends Component {
            let currRequest=this.state.requests.filter(res => res.id ==requestId)
            currRequest[0].status="Approved";
            console.log(currRequest);
-           userService.changeRequestStatus(currRequest[0],requestId).then( res => {
+           userService.changeRequestStatus(currRequest[0],requestId,this.state.Role).then( res => {
                 this.setState({requests:res.data});
             });
     }
@@ -63,14 +67,14 @@ class ViewAllRequest extends Component {
         let currRequest=this.state.requests.filter(res => res.id ==requestId)
         currRequest[0].status="Declined";
         console.log(currRequest);
-        userService.changeRequestStatus(currRequest[0],requestId).then( res => {
+        userService.changeRequestStatus(currRequest[0],requestId,this.state.Role).then( res => {
              this.setState({requests:res.data});
          });
      }
   
     render() {
         if (this.state.redirect) {
-            return <Redirect to={this.state.redirect} />
+            return <Redirect to={this.state.redirect}/>
           }
         return (
             <div>

@@ -38,10 +38,13 @@ class UserService {
     return axios.post(API_URL+ 'user/add-leave',leaveRequest);
   }
 
-  changeRequestStatus(request,requestId){
-    return axios.put(API_URL + 'admin/requests/' + requestId, request, {headers: authHeader() });
+  changeRequestStatus(request,requestId,role){
+    return axios.put(API_URL + 'requests/' + requestId+'?role='+role, request, {headers: authHeader() });
   }
   
+  cancelLeave(empId,request,requestId){
+    return axios.put(API_URL + 'user/cancel-leave/' + empId+'/'+requestId, request, {headers: authHeader() });
+  }
   getRequestById(id){
      return axios.get(API_URL + 'user/requests/' + id , {headers: authHeader()});
   }

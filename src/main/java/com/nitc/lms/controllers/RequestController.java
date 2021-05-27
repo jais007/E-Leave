@@ -44,7 +44,7 @@ public class RequestController {
 	@PreAuthorize("hasRole('MOD') or hasRole('ADMIN')")
 	public List<Request> getAllRequest(@RequestParam("role") String UserRole){
 		if(UserRole.equals("ADMIN"))
-	         	return this.requestRepository.findByOrderByIdDesc();
+	         	return this.requestRepository.findByStatusNotOrderByIdDesc("Cancelled");
 		return this.requestRepository.findByDesignationNotByOrderByIdDesc("HOD");
 	}
 	
@@ -78,11 +78,23 @@ public class RequestController {
 //		    return this.requestRepository.findAll();
 //		}
    
-	@PutMapping("/admin/requests/{requestId}")
-	public List<Request> changeRequestStatus(@PathVariable("requestId") int requestId, @RequestBody Request request){
+	@PutMapping("/user/cancel-leave/{empId}/{requestId}")
+	public List<Request> cancelLeave(@PathVariable("empId") int empId,@PathVariable("requestId") int requestId, @RequestBody Request request){
 		System.out.println(request.toString());
 		this.requestRepository.save(request);
-		return this.requestRepository.findByOrderByIdDesc();
+		//return this.requestRepository.findByOrderByIdDesc();
+	    return this.requestRepository.findByEmpIdOrderByIdDesc(empId);
+
+	}
+	
+	@PutMapping("/requests/{requestId}")
+	public List<Request> changeRequestStatus(@PathVariable("requestId") int requestId, @RequestBody Request request,@RequestParam("role") String UserRole){
+		System.out.println(request.toString());
+		this.requestRepository.save(request);
+		//return this.requestRepository.findByOrderByIdDesc();
+		if(UserRole.equals("ADMIN"))
+         	return this.requestRepository.findByStatusNotOrderByIdDesc("Cancelled");
+	return this.requestRepository.findByDesignationNotByOrderByIdDesc("HOD");
 	}
    
 	@PostMapping("/user/add-leave")

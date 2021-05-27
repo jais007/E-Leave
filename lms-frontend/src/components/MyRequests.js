@@ -34,7 +34,16 @@ class MyRequests extends Component {
             });
         }   
     }
-  
+    handleCancelLeave(requestId){
+        const currentUser = authService.getCurrentUser();
+        console.log(requestId)
+        let currRequest=this.state.requests.filter(res => res.id ==requestId)
+        currRequest[0].status="Cancelled";
+        console.log(currRequest);
+        userService.cancelLeave(currentUser.id,currRequest[0],requestId).then( res => {
+             this.setState({requests:res.data});
+         });
+     }
     render() {
         if (this.state.redirect) {
             return <Redirect to={this.state.redirect} />
@@ -51,6 +60,7 @@ class MyRequests extends Component {
                                 <th>From </th>
                                 <th>To </th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,12 +72,18 @@ class MyRequests extends Component {
                                             <td>{req.leaveType}</td>
                                             <td>{req.startDate}</td>
                                             <td>{req.endDate}</td>
-                                             {req.status == "Approved" ? 
+                                             {  
+                                                  
+                                                 req.status == "Approved" ? 
                                                  <td style={{color:'#40D428'}}> Approved</td> :
                                                  (req.status == "Declined" ?
                                                  <td style={{color:'#FF0000'}}> Declined</td> :
-                                                 <td style={{color:'#FFA500'}}> Pending</td>)
+
+                                                 [req.status=="Pending" ?<td style={{color:'#FFA500'}}> Pending</td> :
+                                                 <td style={{color:'#7E7E7E'}}> Cancelled</td>])
                                              }
+                                            <button disabled={req.status !=="Pending"} style={{marginLeft: "5px",marginTop: "5px"}} 
+                                            onClick={ () => this.handleCancelLeave(req.id)} className="btn btn-info"> Withdraw </button>
                                         </tr>
                                 )
                             }
